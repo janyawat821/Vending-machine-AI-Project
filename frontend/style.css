@@ -1,0 +1,441 @@
+/* Hoshimori — ครีมวาชิ + แดงฮังโกะ
+   โครงเดียวกับดีไซน์ Figma เดิม (กระดานสินค้าซ้าย / ตะกร้า+ชำระเงินขวา) */
+:root {
+  --ink: #4a3f36;      /* น้ำตาลหมึก ตัวหนังสือหลัก */
+  --washi: #efe9dc;    /* ครีมวาชิ พื้นกระดาน */
+  --paper: #fffbf5;    /* ขาวนวล หน้าการ์ด */
+  --hanko: #b04a3a;    /* แดงฮังโกะ ราคา / เส้นประ / ปุ่มหลัก */
+  --hanko-dark: #93392b;
+  --gold: #b8933f;     /* เส้นทอง จุดเน้นรอง */
+  --thumb: #e0d6bf;    /* กรอบรูปสินค้า */
+  --line: #d9cdb2;
+  --muted: #877b6b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #ece4d3;
+  /* ลายคลื่นเซไกฮะจาง ๆ ให้พื้นหลังไม่โล่งจนเกินไป */
+  background-image: radial-gradient(circle at 0 100%, rgba(176,74,58,.05) 0, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='27' viewBox='0 0 54 27'%3E%3Cg fill='none' stroke='%23b04a3a' stroke-opacity='.06' stroke-width='1.2'%3E%3Ccircle cx='0' cy='27' r='24'/%3E%3Ccircle cx='0' cy='27' r='16'/%3E%3Ccircle cx='0' cy='27' r='8'/%3E%3Ccircle cx='54' cy='27' r='24'/%3E%3Ccircle cx='54' cy='27' r='16'/%3E%3Ccircle cx='54' cy='27' r='8'/%3E%3Ccircle cx='27' cy='0' r='24'/%3E%3Ccircle cx='27' cy='0' r='16'/%3E%3Ccircle cx='27' cy='0' r='8'/%3E%3C/g%3E%3C/svg%3E");
+  color: var(--ink);
+  font-family: 'Prompt', 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+button, input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, a:focus-visible {
+  outline: 2px solid var(--hanko);
+  outline-offset: 2px;
+}
+
+/* ---------- กรอบใหญ่ ---------- */
+.board {
+  position: relative;
+  max-width: 1372px;
+  margin: 28px auto 12px;
+  padding: 30px 44px 44px;
+  background: var(--washi);
+  border-radius: 20px;
+  box-shadow: 0 24px 48px -20px rgba(74, 63, 54, .35), 0 1px 0 rgba(255, 255, 255, .6) inset;
+}
+.board::before {
+  /* กรอบทองบาง ๆ ซ้อนด้านในให้ดูมีมิติกว่าเส้นขอบเดียว */
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(184, 147, 63, .35);
+  border-radius: 13px;
+  pointer-events: none;
+}
+
+.head { text-align: center; }
+.head h1 {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.2;
+  letter-spacing: .01em;
+}
+.head p {
+  margin: 6px 0 0;
+  font-size: clamp(15px, 1.7vw, 22px);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.rule {
+  position: relative;
+  border: 0;
+  border-top: 1.5px solid var(--ink);
+  margin: 30px 0 32px;
+}
+.rule::after {
+  /* จุดทองกลางเส้นคั่น แทนแบบเส้นเปล่า ๆ */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  background: var(--paper);
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.layout {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+}
+.left { flex: 1 1 0; min-width: 0; }
+
+/* ---------- สินค้า ---------- */
+.shelf { display: flex; flex-direction: column; gap: 22px; }
+
+.tier-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.tier-title::before {
+  /* สี่เหลี่ยมขนมเปียกปูนสีทองหน้าชื่อหมวด แทนจุดนำสายตาธรรมดา */
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex: none;
+}
+.tier-title small { color: var(--muted); font-size: 14px; font-weight: 400; }
+.tier-title::after { content: ''; flex: 1; border-top: 1.5px dashed var(--line); transform: translateY(-4px); }
+.tier-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* การ์ดสินค้า: หน้าขาว + เส้นประแดง ตามดีไซน์ A */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 225px;
+  padding: 16px 12px 14px;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 3px 8px -4px rgba(74, 63, 54, .25);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed var(--hanko);
+  border-radius: 13px;
+  pointer-events: none;
+}
+.card:hover:not(:disabled) { background: #fff; transform: translateY(-2px); box-shadow: 0 10px 18px -8px rgba(74, 63, 54, .35); }
+.card:active:not(:disabled) { background: #f7f1e6; }
+.card.picked { border-color: var(--hanko); background: #fff3ea; }
+.card.picked::before { border-style: solid; }
+.card:disabled { cursor: not-allowed; }
+.card.out .thumb, .card.out .name, .card.out .price { opacity: 0.4; }
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--thumb);
+  border-radius: 12px;
+  color: #6f5f4b;
+  overflow: hidden;
+}
+.thumb .ico { width: 56%; height: 72%; }
+.thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.name { display: block; margin-top: 10px; font-size: 15px; line-height: 1.35; }
+.price { display: block; margin-top: auto; padding-top: 4px; font-size: 16px; color: var(--hanko); }
+.left-n { position: absolute; left: 16px; bottom: 12px; font-size: 11px; color: var(--hanko); }
+.tag {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+/* ช่องรับสินค้า */
+.tray {
+  display: grid;
+  place-items: center;
+  height: 58px;
+  margin-top: 22px;
+  border: 1.5px dashed var(--ink);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- แผงขวา ---------- */
+.panel {
+  flex: 0 0 386px;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+h2 { margin: 0; font-weight: 400; font-size: 20px; }
+h2.center { text-align: center; }
+
+.cart { display: flex; flex-direction: column; min-height: 300px; padding: 18px 20px 12px; }
+.code { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+.code input {
+  width: 84px;
+  padding: 5px 8px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+.code .btn { padding: 5px 14px; }
+
+.cart-list { flex: 1 1 auto; margin: 10px 0 0; padding: 0; list-style: none; overflow-y: auto; }
+.empty { padding: 30px 8px; text-align: center; color: var(--muted); font-size: 14px; }
+
+.line {
+  display: grid;
+  grid-template-columns: 1fr auto 58px;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1.5px dashed var(--line);
+  font-size: 14px;
+}
+.line small { display: block; color: var(--muted); font-size: 12px; }
+.sum { text-align: right; color: var(--hanko); }
+
+.cart-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 10px;
+  font-size: 17px;
+}
+.cart-foot strong { font-weight: 400; color: var(--hanko); font-size: 22px; }
+.link { padding: 0; background: none; border: 0; color: var(--muted); font-size: 13px; text-decoration: underline; }
+
+.pay { padding: 14px 20px 18px; border-top: 1.5px dashed var(--line); }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 12px; }
+.tab { padding: 7px 0; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; font-size: 14px; }
+.tab.is-on { background: var(--ink); color: var(--paper); }
+
+.bills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.bills button { padding: 8px 0; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; }
+.bills button:active { background: var(--washi); }
+
+.rows { margin: 12px 0 0; font-size: 14px; }
+.rows div { display: flex; justify-content: space-between; padding: 2px 0; }
+.rows dt, .rows dd { margin: 0; }
+.rows dt { color: var(--muted); }
+
+.qr { display: flex; gap: 14px; align-items: center; }
+/* QR: แสดงรูปจริงจาก assets/promptpay-qr.png ถ้าโหลดไม่ได้ (ไฟล์หาย/ย้ายโฟลเดอร์) จะลบรูปทิ้งเอง
+   แล้วโชว์ลาย QR จำลองที่วาดด้วย CSS ล้วนซึ่งอยู่ข้างใต้แทน ไม่มีทางขึ้นไอคอนรูปพังอีก */
+.qr-mock {
+  position: relative;
+  flex: none;
+  width: 116px;
+  height: 116px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  overflow: hidden;
+}
+.qr-mock > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+}
+.qr-mock i {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-conic-gradient(#1a1a1a 0% 25%, #fff 0% 50%);
+  background-size: 12px 12px;
+}
+/* มุมสามจุดแบบ QR จริง (บนซ้าย บนขวา ล่างซ้าย) */
+.qr-mock i::before, .qr-mock i::after, .qr-mock i span {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: #1a1a1a;
+  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 9px #1a1a1a;
+}
+.qr-mock i::before { top: 0; left: 0; }
+.qr-mock i::after { top: 0; right: 0; }
+.qr-mock i span { bottom: 0; left: 0; display: block; }
+.qr .info { flex: 1; font-size: 14px; }
+.qr .info p { margin: 0 0 4px; }
+.qr .amount { font-size: 22px; color: var(--hanko); }
+.qr .expired { color: var(--hanko); }
+.qr .hint { color: var(--muted); font-size: 12px; }
+
+.actions { display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; margin-top: 12px; }
+.actions.single { grid-template-columns: 1fr; }
+.btn { padding: 9px 0; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; }
+.btn.primary { background: var(--hanko); border-color: var(--hanko); color: var(--paper); }
+.btn.primary:hover:not(:disabled) { background: var(--hanko-dark); border-color: var(--hanko-dark); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.status { min-height: 18px; margin: 8px 0 0; font-size: 12.5px; color: var(--hanko); }
+
+.conn { margin: 0 0 24px; text-align: center; font-size: 12px; color: var(--muted); }
+.conn a { color: var(--muted); }
+
+/* ---------- หน้าต่างสรุปการซื้อ ---------- */
+dialog {
+  width: min(420px, 92vw);
+  padding: 26px 28px 22px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  font-size: 14.5px;
+}
+dialog::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed var(--hanko);
+  border-radius: 13px;
+  pointer-events: none;
+}
+dialog::backdrop { background: rgba(74, 63, 54, 0.4); }
+dialog h3 { margin: 0 0 2px; font-weight: 500; font-size: 20px; }
+dialog .order { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+dialog ul { margin: 0 0 12px; padding: 0; list-style: none; }
+dialog li { display: flex; justify-content: space-between; padding: 3px 0; }
+dialog .rows { border-top: 1.5px dashed var(--line); padding-top: 10px; margin-top: 0; }
+dialog .note { margin: 12px 0 16px; color: var(--muted); font-size: 13px; }
+dialog .btn { width: 100%; }
+
+/* ---------- จอเล็ก ---------- */
+@media (max-width: 1100px) {
+  .layout { flex-direction: column; align-items: stretch; }
+  .tier-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .panel { flex: none; }
+  .cart-list { max-height: 260px; }
+}
+@media (max-width: 600px) {
+  .board { margin: 0; padding: 22px 14px 32px; border-radius: 0; }
+  .tier-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { min-height: 200px; }
+  .name { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+/* แอดมิน: ใช้โทนเดียวกับหน้าตู้ (ครีมวาชิ + แดงฮังโกะ) */
+.board.admin { max-width: 980px; }
+[hidden] { display: none !important; }
+
+.login { max-width: 300px; margin: 10px auto 6px; display: flex; flex-direction: column; gap: 10px; text-align: center; }
+.login input {
+  padding: 9px 14px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+.login .btn { padding: 10px 0; }
+
+.summary { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.stat { flex: 1 1 150px; padding: 10px 14px; background: var(--paper); border: 2px solid var(--line); border-radius: 12px; }
+.stat span { display: block; color: var(--muted); font-size: 12.5px; }
+.stat b { display: block; font-size: 22px; font-weight: 400; }
+.stat.warn b { color: var(--hanko); }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.toolbar .btn { padding: 7px 16px; }
+.toast { margin-left: 6px; color: var(--hanko); font-size: 13px; }
+
+.sec-title { margin: 24px 0 10px; font-size: 18px; }
+
+.tier-block { margin-bottom: 14px; }
+.tier-block h3 { margin: 0 0 8px; font-size: 14px; font-weight: 500; color: var(--muted); }
+.stock-row {
+  display: grid;
+  grid-template-columns: 56px 1fr 150px auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+}
+.stock-row.low { border-color: #dfa99c; }
+.stock-row.out { border-color: var(--hanko); }
+.stock-row .thumb { width: 56px; height: 42px; aspect-ratio: auto; border-radius: 8px; }
+.stock-row .thumb .ico { width: 30px; height: 30px; }
+.stock-row .nm { font-size: 14px; }
+.stock-row .nm small { display: block; color: var(--muted); font-size: 12px; }
+.stock-row .bar { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 12px; }
+.stock-row .track { height: 6px; background: var(--washi); border-radius: 999px; overflow: hidden; }
+.stock-row .fill { height: 100%; background: var(--ink); }
+.stock-row.low .fill, .stock-row.out .fill { background: var(--hanko); }
+.stock-row .bar b { color: var(--ink); font-weight: 500; }
+.stock-row.low .bar b, .stock-row.out .bar b { color: var(--hanko); }
+
+.stepper { display: flex; align-items: center; gap: 6px; }
+.stepper button { width: 30px; height: 30px; padding: 0; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; line-height: 1; }
+.stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
+.stepper .fillbtn { width: auto; padding: 0 10px; font-size: 13px; border-color: var(--hanko); color: var(--hanko); }
+.stepper output { min-width: 26px; text-align: center; }
+
+.sales { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--paper); border: 2px solid var(--line); }
+.sales th, .sales td { padding: 8px 12px; text-align: left; border-bottom: 1.5px dashed var(--line); }
+.sales th { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+.sales td.num, .sales th.num { text-align: right; }
+.empty-note { padding: 18px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 12px; }
+
+@media (max-width: 720px) {
+  .stock-row { grid-template-columns: 48px 1fr; }
+  .stock-row .bar, .stock-row .stepper { grid-column: 1 / -1; }
+  .sales th:nth-child(3), .sales td:nth-child(3) { display: none; }
+}

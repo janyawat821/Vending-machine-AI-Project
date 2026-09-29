@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoshimori (星守り) — Spiritual Goods Vending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500&family=Noto+Sans+JP:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="board">
+  <header class="head">
+    <h1>Hoshimori (星守り)</h1>
+    <p>Spiritual Goods Vending</p>
+  </header>
+  <hr class="rule">
+
+  <div class="layout">
+    <div class="left">
+      <section class="shelf" id="shelf" aria-label="สินค้า"></section>
+      <div class="tray" id="tray"><span>ช่องรับสินค้า</span></div>
+    </div>
+
+    <aside class="panel">
+      <section class="cart">
+        <h2 class="center">Cart Summary</h2>
+        <form class="code" id="codeForm" autocomplete="off">
+          <label for="codeInput">รหัสสินค้า</label>
+          <input id="codeInput" maxlength="3" placeholder="เช่น A1" spellcheck="false">
+          <button class="btn" type="submit">เลือก</button>
+        </form>
+        <ul class="cart-list" id="cartList"></ul>
+        <div class="cart-foot" id="cartFoot"></div>
+      </section>
+
+      <section class="pay">
+        <h2>Payment Method</h2>
+        <div class="tabs">
+          <button class="tab is-on" data-action="method" data-value="cash">เงินสด</button>
+          <button class="tab" data-action="method" data-value="promptpay">PromptPay</button>
+        </div>
+        <div id="payBody"></div>
+        <p class="status" id="statusMsg" role="status"></p>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<p class="conn"><span id="conn"></span> · <a href="admin.html">แอดมิน</a></p>
+
+<dialog id="resultDialog"></dialog>
+
+<script src="icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

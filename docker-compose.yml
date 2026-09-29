@@ -1,0 +1,17 @@
+# docker-compose.yml — รันตู้ทั้งระบบด้วยคำสั่งเดียว: docker compose up --build
+# เปิด http://localhost:3001 (ตู้และหลังบ้านอยู่พอร์ตเดียวกัน)
+services:
+  hoshimori:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - ADMIN_PIN=1234
+    volumes:
+      - hoshimori-data:/app/backend/data
+    restart: unless-stopped
+
+volumes:
+  hoshimori-data:

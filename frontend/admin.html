@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>แอดมิน — Hoshimori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500&family=Noto+Sans+JP:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="board admin">
+  <header class="head">
+    <h1>แอดมิน</h1>
+    <p>Hoshimori · จัดการสต็อก</p>
+  </header>
+  <hr class="rule">
+
+  <!-- เข้าสู่ระบบ -->
+  <section id="loginView" class="login">
+    <label for="pin">PIN ผู้ดูแล</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="••••">
+    <button class="btn primary" id="loginBtn">เข้าสู่ระบบ</button>
+    <p class="status" id="loginMsg" role="status"></p>
+  </section>
+
+  <!-- หน้าแอดมิน -->
+  <section id="adminView" hidden>
+    <div class="summary" id="summary"></div>
+
+    <div class="toolbar">
+      <button class="btn" id="refreshBtn">รีเฟรช</button>
+      <button class="btn" id="refillBtn">เติมเต็มทุกช่อง</button>
+      <button class="btn" id="logoutBtn">ออกจากระบบ</button>
+      <span class="toast" id="toast" role="status"></span>
+    </div>
+
+    <h2 class="sec-title">สต็อกสินค้า</h2>
+    <div id="stockList"></div>
+
+    <h2 class="sec-title">ประวัติการขายล่าสุด</h2>
+    <div id="salesList"></div>
+  </section>
+</main>
+
+<p class="conn"><a href="index.html">← กลับหน้าตู้</a></p>
+
+<script src="icons.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
